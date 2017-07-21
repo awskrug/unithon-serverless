@@ -296,11 +296,11 @@ Amazon API Gateway 콘솔을 사용해서 새로운 API를 작성하십시오.
 
 </p></details>
 
-### 1. 새 리소스 및 메소드 만들기 ( /todos POST  )
-API 내에 /todos 라는 새 리소스를 만듭니다. 그런 다음 해당 리소스에 대한 POST 메소드를 작성하고 이 모듈의 첫번째 단계에서 작성한 RequestUnicorn 함수로 람다 프록시 통합(Lambda proxy integration)을 사용하도록 구성하십시오.
+### 1. 새로운 리소스 및 메소드 만들기 ( /todos POST  )
+API 내에 /todos 라는 새 리소스를 만듭니다. 그런 다음 해당 리소스에 대한 POST, GET 메소드를 작성하고 각각에 알맞는 AWS Lambda 함수를 연결하도록 설정하십시오.
 
 <details>
-<summary><strong>todos POST 단계별 지침 (자세한 내용을 보려면 펼쳐주세요)</strong></summary><p>
+<summary><strong>/todos POST 메소드 생성 단계별 지침 (자세한 내용을 보려면 펼쳐주세요)</strong></summary><p>
 
 1. 왼쪽 네비게이션 메뉴에서 WildRydes API 아래의 **Resources** 를 클릭하십시오.
 
@@ -326,10 +326,10 @@ API 내에 /todos 라는 새 리소스를 만듭니다. 그런 다음 해당 리
 
 </p></details>
 
-### 2. 새 리소스 및 메소드 만들기 ( /todos GET  )
+### 2. 새로운 메소드 만들기 ( /todos GET  )
 
 <details>
-<summary><strong>todos POST 단계별 지침 (자세한 내용을 보려면 펼쳐주세요)</strong></summary><p>
+<summary><strong>/todos GET 메소드 생성 단계별 지침 (자세한 내용을 보려면 펼쳐주세요)</strong></summary><p>
 
 1. 이전에 생성된 `/todos` 리소스가 선택되면, **Action** 드롭 다운 메뉴에서 **Create Method** 를 선택하십시오.
 
@@ -414,7 +414,7 @@ Amazon API Gateway 콘솔에서 Actions 를 선택하고, Deploy API 를 선택�
 
 </p></details>
 
-## 작성한 내용 검증하기
+## 작성한 내용 검증하기 (마지막)
 
 1. 귀하의 웹 호스팅 사이트 도메인을 방문하십시오.
 
