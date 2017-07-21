@@ -29,9 +29,7 @@
 
 ### 2. 콘텐츠 업로드
 
-    https://github.com/hyunmin-mz/unithon-serverless/blob/master/files/demo.zip
-
-위 경로에서 demo.zip 압축파일을 다운로드 한 다음 압축을 풀고, 폴더 안에 있는 index.html 파일을 사용자가 생성한 버킷에 업로드해서 이용하실수도 있습니다.
+[demo.zip](./files/demo.zip) 압축파일을 다운로드 한 다음 압축을 풀고, 폴더 안에 있는 index.html 파일을 사용자가 생성한 버킷에 업로드해서 이용하실수도 있습니다.
 
 demo 압축파일을 풀고, index.html 파일을 방금전 생성한 S3 버킷에 업로드합니다.
 
@@ -70,7 +68,13 @@ demo 압축파일을 풀고, index.html 파일을 방금전 생성한 S3 버킷�
 
 ### 4. 웹 사이트 호스팅 활성화
 
-콘솔을 사용해서 정적 웹사이트 호스팅을 활성화합니다. 버킷을 선택한 후에 속성탭에서 이 작업을 수행할 수 있습니다. index document로 `index.html` 을 설정하고, error document는 비워두십시오. 자세한 내용은 [정적 웹 사이트 호스팅을 위한 버킷 구성](https://docs.aws.amazon.com/AmazonS3/latest/dev/HowDoIWebsiteConfiguration.html) 의 설명서를 참고하십시오.
+콘솔을 사용해서 정적 웹사이트 호스팅을 활성화합니다. 버킷을 선택한 후에 속성탭에서 이 작업을 수행할 수 있습니다. 
+
+index document로 `index.html` 을 설정하고, error document는 비워두십시오.
+
+자세한 내용은 [정적 웹 사이트 호스팅을 위한 버킷 구성](https://docs.aws.amazon.com/AmazonS3/latest/dev/HowDoIWebsiteConfiguration.html) 의 설명서를 참고하십시오.
+
+웹 사이트 호스팅을 설정한 url을 메모장에 복사해두면 좋습니다.
 
 <details>
 <summary><strong>단계별 지침 (자세한 내용을 보려면 펼쳐주세요)</strong></summary><p>
@@ -136,9 +140,10 @@ IAM 콘솔을 사용하여 새 역할을 만듭니다. 이름을 `UnithonLambdaR
 </p></details>
 
 ### 3. 요청 처리를 위한 람다 함수 만들기
+
 AWS Lambda 콘솔을 사용하여 API 요청을 처리할 `list`, `create` 라는 새로운 람다 함수를 만듭니다.
 
-demo.zip 파일에서 같이 제공된 [list.py](./files/list.py) [create.py](./files/create.py) 예제 구현을 사용하십시오.
+[demo.zip](./files/demo.zip) 파일에서 같이 제공된 [create.py](./files/create.py), [list.py](./files/list.py) 예제 구현을 사용하십시오.
 
 해당 파일을 복사하여 AWS Lambda 콘솔 편집기에 붙여넣기만 하면 됩니다.
 
@@ -184,7 +189,7 @@ demo.zip 파일에서 같이 제공된 [list.py](./files/list.py) [create.py](./
 
 1. 트리거를 지금 설정하지 마십시오. **Next** 를 선택하여 함수를 정의하는 부분을 진행합니다.
 
-1. **Name** 입력칸에 `create` 를 입력하십시오.
+1. **Name** 입력칸에 `list` 를 입력하십시오.
 
 1. description 입력칸은 옵션입니다.
 
@@ -201,3 +206,73 @@ demo.zip 파일에서 같이 제공된 [list.py](./files/list.py) [create.py](./
 1. **Next** 을 선택한 다음 리뷰 페이지에서 **Create function** 를 선택하십시오.
 
 </p></details>
+
+## 작성한 람다 함수 검증하기
+
+<details>
+<summary><strong>create 람다 함수 테스트 단계별 지침 (자세한 내용을 보려면 펼쳐주세요)</strong></summary><p>
+
+이 모듈에서는 AWS Lambda 콘솔을 사용하여 작성한 함수를 테스트합니다. 다음 모듈에서는 API Gateway 가 있는 REST API를 추가하므로 첫번째 모듈에서 배포한 브라우저 기반 응용 프로그램에서 함수를 호출할 수 있습니다.
+
+1. 작성한 **create** 람다 함수의 기본 편집 화면에서, 먼저 **Actions** 를 선택한 다음 **Configure test event** 를 선택하십시오.
+
+1. 다음 테스트 이벤트를 복사해서 편집기에 붙여넣습니다:
+
+    ```JSON
+    {
+        "data": {
+            "text": "Go UNITHON 5th Event"
+        }
+    }
+    ```
+
+1. **Save and test** 를 선택하십시오.
+
+1. 실행이 성공했고 함수 결과가 다음과 같은지 확인하십시오:
+```JSON
+{
+  "body": "{\"text\": \"Go UNITHON 5th Event\", \"checked\": false, \"id\": \"8567db22-6dc8-11e7-a4ed-a60df980cd60\", \"createdAt\": 1500609365694, \"updatedAt\": 1500609365694}",
+  "statusCode": 200
+}
+```
+
+</p></details>
+
+## 작성한 list lambda 함수 검증하기
+
+<details>
+<summary><strong>create 람다 함수 테스트 단계별 지침 (자세한 내용을 보려면 펼쳐주세요)</strong></summary><p>
+
+이 모듈에서는 AWS Lambda 콘솔을 사용하여 작성한 함수를 테스트합니다. 다음 모듈에서는 API Gateway 가 있는 REST API를 추가하므로 첫번째 모듈에서 배포한 브라우저 기반 응용 프로그램에서 함수를 호출할 수 있습니다.
+
+1. 작성한 **list** 람다 함수의 기본 편집 화면에서, 먼저 **Actions** 를 선택한 다음 **Configure test event** 를 선택하십시오.
+
+1. 다음 테스트 이벤트를 복사해서 편집기에 붙여넣습니다:
+
+    ```JSON
+    {
+    }
+    ```
+
+1. **Save and test** 를 선택하십시오.
+
+1. 실행이 성공했고 함수 결과가 다음과 같은지 확인하십시오:
+```JSON
+{
+  "body": [
+    {
+      "text": "Go UNITHON 5th Event",
+      "checked": false,
+      "id": "8567db22-6dc8-11e7-a4ed-a60df980cd60",
+      "createdAt": 1500609365694,
+      "updatedAt": 1500609365694
+    }
+  ],
+  "statusCode": 200
+}
+```
+
+</p></details>
+
+람다 콘솔을 사용해서 새 함수를 성공적으로 테스트 한 뒤, 다음 모듈인 RESTful APIs 로 넘어가시면 됩니다.
+
