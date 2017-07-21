@@ -390,8 +390,6 @@ Amazon API Gateway 콘솔에서 Actions 를 선택하고, Deploy API 를 선택�
 <details>
 <summary><strong>단계별 지침 (자세한 내용을 보려면 펼쳐주세요)</strong></summary><p>
 
-모듈 2 를 수동으로 완료했다면, 로컬에 저장한 `config.js` 파일을 편집 할 수 있습니다. 만약 AWS CloudFormation 템플릿을 사용한 경우 먼저 S3 버킷에서 `config.js` 파일을 다운로드 해야합니다. 그렇게 하려면 웹 사이트의 기본 URL 아래에 있는 `/js/config.js` 를 방문해서 **File** 을 선택한 다음, 브라우저에서 **Save Page As** 을 선택하십시오.
-
 1. 텍스트 편집기에서 index.html 파일을 엽니다.
 
 1. index.html 파일의 **<script>** 아래에서 **endpoint** 설정을 업데이트 하십시오. 이전 섹션에서 작성한 배포 단계(deployment stage) 의 값을 **Invoke URL** 로 설정하십시오.
@@ -418,7 +416,7 @@ Amazon API Gateway 콘솔에서 Actions 를 선택하고, Deploy API 를 선택�
 
 ## 작성한 내용 검증하기
 
-1. 귀하의 웹 호스팅 사이트 도메인을 방문하십시오. 예) http://unithon-demo-3456.s3-website-ap-northeast-1.amazonaws.com
+1. 귀하의 웹 호스팅 사이트 도메인을 방문하십시오.
 
 1. To-Do 항목을 입력해주세요: 의 입력칸 부분에 입력값을 넣고 To-Do 추가하기 버튼을 눌러주십시오.
 
@@ -428,3 +426,5 @@ Amazon API Gateway 콘솔에서 Actions 를 선택하고, Deploy API 를 선택�
 
 1. 더 다양한 서버리스 예제는 이 링크에서 확인 가능합니다. [AWS 서버리스 워크샵](https://github.com/awskrug/aws-serverless-workshops)
 
+1. **중요사항** 만약 이 데모를 더 이상 사용하지 않는다면 **이제까지 생성한 AWS 리소스를 꼭 삭제하는게 좋습니다!!**
+2. 
