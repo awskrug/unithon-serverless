@@ -6,7 +6,7 @@
 
 ![유니톤 웹 애플리케이션 아키텍처](./images/unithon-complete-architecture.png)
 
-# S3 Static Web Hosting
+# 모듈 1 : S3 Static Web Hosting
 
 ### 1. S3 버킷 생성
 
@@ -86,5 +86,118 @@ demo 압축파일을 풀고, index.html 파일을 방금전 생성한 S3 버킷�
 1. **Save**을 클릭하여 변경 사항을 저장하십시오.
 
     ![웹사이트 호스팅 활성화 스크린샷](./images/enable-website-hosting.png)
+
+</p></details>
+
+# 모듈 2 : 서버리스 백엔드
+
+### 1. Amazon DynamoDB 테이블 만들기
+
+Amazon DynamoDB 콘솔을 사용해서 새로운 DynamoDB 테이블을 만드십시오. `mydb` 라는 테이블을 만들고 String 타입의 `id` 라는 파티션 키(Partition Key)를 부여하십시오. 다른 모든 설정에는 기본값을 사용하십시오.
+
+<details>
+<summary><strong>단계별 지침 (자세한 내용을 보려면 펼쳐주세요)</strong></summary><p>
+
+1. AWS Management 콘솔에서, **Services** 를 선택한 다음 데이터베이스에서 **DynamoDB** 를 선택하십시오.
+
+1. **Create table** 을 선택하십시오.
+
+1. **Table name** 에 `mydb` 를 입력하십시오.
+
+1. **Partition key** 에 대해 `id` 키 유형(key type) 으로 **String** 을 선택하십시오.
+
+1. **Use default settings** 체크박스를 선택하고 **Create** 을 선택하십시오.
+
+</p></details>
+
+### 2. 람다 함수에 대한 IAM 역할 만들기
+
+IAM 콘솔을 사용하여 새 역할을 만듭니다. 이름을 `UnithonLambdaRole` 로 지정하고 역할 유형으로 AWS Lambda를 선택하십시오. 함수 권한을 부여하는 정책을 첨부하여 Amazon CloudWatch 로그에 기록하고 항목을 DynamoDB 테이블에 저장해야합니다.
+
+<details>
+<summary><strong>단계별 지침 (자세한 내용을 보려면 펼쳐주세요)</strong></summary><p>
+
+1. AWS Management Console 에서 **Services** 를 선택한 다음, Security, Identity & Compliance 섹션에서 **IAM** 을 선택하십시오.
+
+1. 왼쪽 네비게이션바에서 **Roles** 을 선택하고 **Create new role** 를 선택하십시오.
+
+1. 역할 유형(role type)으로 **AWS Lambda** 를 선택하십시오.
+
+    **참고:** 역할 유형(role type)을 선택하면 AWS가 사용자를 대신해서 이 역할을 맡을 수 있도록 역할에 대한 신뢰 정책(trust policy)이 자동으로 생성됩니다. CLI, AWS CloudFormation 또는 다른 메커니즘을 사용해서 이 역할을 작성하는 경우 직접 신뢰 정책(trust policy)을 지정합니다.
+
+1. **Filter** 압력란에 `AmazonDynamoDBFullAccess` 를 입력하고 해당 역할 옆의 확인란을 선택하십시오. (**주의!!** 데모에서는 빠른 진행을 위해서 전체 권한을 적용했지만, 실제로는 세세한 권한 설정을 해주는걸 권장합니다.)
+
+1. **Next Step** 을 선택하십시오.
+
+1. **Role name** 에 `UnithonLambdaRole` 를 입력하십시오.
+
+1. **Create role** 을 선택하십시오.
+
+</p></details>
+
+### 3. 요청 처리를 위한 람다 함수 만들기
+AWS Lambda 콘솔을 사용하여 API 요청을 처리할 `list`, `create` 라는 새로운 람다 함수를 만듭니다.
+
+demo.zip 파일에서 같이 제공된 [list.py](./files/list.py) [create.py](./files/create.py) 예제 구현을 사용하십시오.
+
+해당 파일을 복사하여 AWS Lambda 콘솔 편집기에 붙여넣기만 하면 됩니다.
+
+이전 섹션에서 작성한 `UnithonLambdaRole` IAM 역할을 사용하도록 함수를 설정해야합니다.
+
+<details>
+<summary><strong>create 함수 생성 단계별 지침 (자세한 내용을 보려면 펼쳐주세요)</strong></summary><p>
+
+1. **Services** 를 선택한 다음 Compute 섹션에서 **Lambda** 를 선택하십시오.
+
+1. **Create a Lambda function** 를 선택하십시오.
+
+1. **Blank Function** 블루프린트를 선택하십시오.
+
+1. 트리거를 지금 설정하지 마십시오. **Next** 를 선택하여 함수를 정의하는 부분을 진행합니다.
+
+1. **Name** 입력칸에 `create` 를 입력하십시오.
+
+1. description 입력칸은 옵션입니다.
+
+1. **Runtime** 에 대해 **Python 2.7** 을 선택하십시오.
+
+1. [create.py](./files/create.py) 의 코드를 복사하여 코드 입력 영역에 붙여 넣으십시오.
+
+1. **Environment variables** 입력칸에 **Key** 값으로 `DYNAMODB_TABLE` 을 입력하고, **Value**에 `mydb` 를 입력합니다.
+
+1. **Handler** 입력칸에 대해 `lambda_function.lambda_handler` 의 기본값 `lambda_function.create` 로 변경합니다.
+
+1. **Existing Role** 드롭다운에서 `UnithonLambdaRole` 를 선택합니다.
+
+1. **Next** 을 선택한 다음 리뷰 페이지에서 **Create function** 를 선택하십시오.
+
+</p></details>
+
+<details>
+<summary><strong>list 함수 생성 단계별 지침 (자세한 내용을 보려면 펼쳐주세요)</strong></summary><p>
+
+1. **Services** 를 선택한 다음 Compute 섹션에서 **Lambda** 를 선택하십시오.
+
+1. **Create a Lambda function** 를 선택하십시오.
+
+1. **Blank Function** 블루프린트를 선택하십시오.
+
+1. 트리거를 지금 설정하지 마십시오. **Next** 를 선택하여 함수를 정의하는 부분을 진행합니다.
+
+1. **Name** 입력칸에 `create` 를 입력하십시오.
+
+1. description 입력칸은 옵션입니다.
+
+1. **Runtime** 에 대해 **Python 2.7** 을 선택하십시오.
+
+1. [list.py](./files/list.py) 의 코드를 복사하여 코드 입력 영역에 붙여 넣으십시오.
+
+1. **Environment variables** 입력칸에 **Key** 값으로 `DYNAMODB_TABLE` 을 입력하고, **Value**에 `mydb` 를 입력합니다.
+
+1. **Handler** 입력칸에 대해 `lambda_function.lambda_handler` 의 기본값 `lambda_function.list` 로 변경합니다.
+
+1. **Existing Role** 드롭다운에서 `UnithonLambdaRole` 를 선택합니다.
+
+1. **Next** 을 선택한 다음 리뷰 페이지에서 **Create function** 를 선택하십시오.
 
 </p></details>
