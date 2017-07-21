@@ -1,0 +1,63 @@
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+	<title>UNITON To-Do List Simple Application</title>
+	<meta charset="UTF-8">
+</head>
+
+<body ng-app="todoListApp" class="ng-scope" ng-controller="NewToDoListController" ng-init="gettodoList()">
+<div class="container">
+
+<h1 align="center">UNITON TO-DO List Simple Application</h1>
+
+<p align="center">
+	To-Do 항목을 입력해주세요:
+	<br />
+	<input type="text" size="40" ng-model="todoListRequest.todo" >
+	<br />
+	<br />
+	<button type="button" ng-click="addItem(todoListRequest)">To-Do 추가하기</button>
+	<br />
+	<br />
+	<table border="1" style="width:25%">
+		<tr>
+			<td style="text-align:center"><b>id</b></td>
+			<td style="text-align:center"><b>To-Do</b></td>
+		</tr>
+		<tbody ng:repeat="item in getToDoListResponse.body track by $index">
+			<tr>
+				<td style="text-align:center">{{ item.id }}</td>
+				<td style="text-align:center">{{ item.text }}</td>
+			</tr>
+		</tbody>
+	</table>
+	<br />
+	<button type="button" ng-click="gettodoList()">나의 To-Do 항목 가져오기</button>
+</p>
+
+<script>
+	angular.module('todoListApp', [])
+		.controller('NewToDoListController', ['$scope', '$location', '$http', function($scope, $location, $http) {
+			
+			var endpoint = "<your-api-gateway-endpoint>";
+			
+			$scope.addItem = function(todoListRequest) {
+				var data = { "data" : { "text" : todoListRequest.todo } };
+				$http.post(endpoint + "/todos", data).success(function(response) {
+					todoListRequest.todo = "";
+					$scope.gettodoList();
+				});
+			}
+			
+			$scope.gettodoList = function() {
+				$http.get(endpoint + "/todos").success(function(response) {
+					$scope.getToDoListResponse = response;;
+				});
+			}
+			
+		}]);
+</script>
+
+</body>
+</html>
