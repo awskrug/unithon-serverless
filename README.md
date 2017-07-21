@@ -427,4 +427,3 @@ Amazon API Gateway 콘솔에서 Actions 를 선택하고, Deploy API 를 선택�
 1. 더 다양한 서버리스 예제는 이 링크에서 확인 가능합니다. [AWS 서버리스 워크샵](https://github.com/awskrug/aws-serverless-workshops)
 
 1. **중요사항** 만약 이 데모를 더 이상 사용하지 않는다면 **이제까지 생성한 AWS 리소스를 꼭 삭제하는게 좋습니다!!**
-2. 
