@@ -297,7 +297,7 @@ Amazon API Gateway 콘솔을 사용해서 새로운 API를 작성하십시오.
 </p></details>
 
 ### 1. 새로운 리소스 및 메소드 만들기 ( /todos POST  )
-API 내에 /todos 라는 새 리소스를 만듭니다. 그런 다음 해당 리소스에 대한 POST 메소드를 작성하고 이 모듈의 첫번째 단계에서 작성한 RequestUnicorn 함수로 람다 프록시 통합(Lambda proxy integration)을 사용하도록 구성하십시오.
+API 내에 /todos 라는 새 리소스를 만듭니다. 그런 다음 해당 리소스에 대한 POST, GET 메소드를 작성하고 각각에 알맞는 AWS Lambda 함수를 연결하도록 설정하십시오.
 
 <details>
 <summary><strong>/todos POST 메소드 생성 단계별 지침 (자세한 내용을 보려면 펼쳐주세요)</strong></summary><p>
